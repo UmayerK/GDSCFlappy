@@ -2734,7 +2734,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
   Es({
     width: 1024,
     height: 768,
-    streth: true,
+    stretch: true,
     letterbox: true
   });
   var WIDTH = 1024;
@@ -2751,7 +2751,6 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     gravity(3200);
     const flappy = add([
       sprite("flappy"),
-      pos(80, 40),
       pos(WIDTH / 4, 0),
       area(),
       body()
@@ -2766,7 +2765,7 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
     flappy.action(() => {
       if (flappy.pos.y >= HEIGHT || flappy.pos.y <= CEILING) {
-        go("Lose");
+        go("lose");
       }
     });
     function spawnPipe() {
@@ -2786,8 +2785,8 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
         pos(WIDTH, h1 + PIPE_OPEN),
         rect(64, h2),
         color(111, 187, 49),
-        area(),
         outline(4),
+        area(),
         move(LEFT, SPEED),
         cleanup(),
         "pipe"
@@ -2802,6 +2801,30 @@ vec4 frag(vec3 pos, vec2 uv, vec4 color, sampler2D tex) {
     });
   });
   scene("lose", () => {
+    add([
+      sprite("bg"),
+      pos(0, 0)
+    ]);
+    add([
+      sprite("flappy"),
+      pos(WIDTH / 2, HEIGHT / 2 - 100),
+      scale(3),
+      origin("center")
+    ]);
+    add([
+      text("GAMEOVER"),
+      pos(WIDTH / 2, HEIGHT / 2 + 100),
+      scale(2.5),
+      origin("center")
+    ]);
+    add([
+      text("CLICK TO PLAY AGAIN"),
+      pos(WIDTH / 2, HEIGHT / 2 + 300),
+      origin("center")
+    ]);
+    mouseClick(() => {
+      go("main");
+    });
   });
   go("main");
 })();
